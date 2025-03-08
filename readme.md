@@ -1,131 +1,155 @@
-# Week 17 - Flask for Backend
+# Challenge Week: Task API
 
-## Objective
+This project is a simple Task API built using Flask and SQLAlchemy. The API allows you to perform basic CRUD operations (Create, Read, Update, Delete) on tasks, as well as mark a task as completed.
 
-The objective of this challenge is to build a simple RESTful API using Flask to manage tasks. This exercise will help students reinforce their understanding of API development, HTTP methods, and JSON responses.
+## Project Structure
 
-## Challenge Overview
+- **app.py**: Main Flask application that sets up the API endpoints and database models.
+- **instance/**: Folder where the SQLite database (`tasks.db`) is stored. This folder is created automatically if it does not exist.
 
-Students will develop a **Task Management API** that supports basic **CRUD** (Create, Read, Update, Delete) operations. The API should be able to:
+## Requirements
 
-- **Create a new task**
-- **Retrieve all tasks**
-- **Retrieve a task by ID**
-- **Update a task**
-- **Delete a task**
-- **(Bonus) Mark a task as completed**
-- **(Bonus) Use class-based views** ([Flask Class-Based Views](https://flask.palletsprojects.com/en/stable/views/))
+- Python 3.x
+- Flask
+- Flask-SQLAlchemy
 
----
+Install the required packages using pip:
 
-## Instructions
-
-### **1. Setup**
-
-#### **Install Flask if not already installed:**
-
-```sh
-uv add flask
+```bash
+pip install Flask Flask-SQLAlchemy
 ```
 
-#### **Create a Python script (`app.py`) for the API.**
+## How to Run the Application
 
----
+1. Ensure you are in the project directory.
+2. Run the application:
 
-## **2. API Requirements**
+   ```bash
+   python app.py
+   ```
 
-### **Create a Task**
+3. The API will be accessible at: `http://127.0.0.1:5000`
 
-- **Endpoint:** `POST /tasks`
-- **Request Body:**
-  ```json
-  {
-    "title": "Task Title",
-    "description": "Task Description"
-  }
-  ```
-- **Response:**
-  ```json
-  {
-    "id": 1,
-    "title": "Task Title",
-    "description": "Task Description",
-    "completed": false
-  }
-  ```
+## API Endpoints
 
-### **Retrieve All Tasks**
+### Create a Task
+- **Endpoint:** `/tasks`
+- **Method:** POST
+- **Body:** JSON with `title` and `description`
 
-- **Endpoint:** `GET /tasks`
-- **Response:**
-  ```json
-  [
-    {
-      "id": 1,
-      "title": "Learn Flask",
-      "description": "Build an API using Flask.",
-      "completed": false
-    }
-  ]
-  ```
+Example using PowerShell:
 
-### **Retrieve a Specific Task**
+```powershell
+Invoke-RestMethod -Uri "http://127.0.0.1:5000/tasks" -Method Post -Body '{"title": "Learn Flask", "description": "Build an API"}' -ContentType "application/json"
+```
 
-- **Endpoint:** `GET /tasks/<task_id>`
-- **Response:**
-  ```json
-  {
-    "id": 1,
-    "title": "Learn Flask",
-    "description": "Build an API using Flask.",
-    "completed": false
-  }
-  ```
+### Retrieve All Tasks
+- **Endpoint:** `/tasks`
+- **Method:** GET
 
-### **Update a Task**
+Example:
 
-- **Endpoint:** `PUT /tasks/<task_id>`
-- **Request Body:**
-  ```json
-  {
-    "title": "Updated Task Title",
-    "description": "Updated Task Description"
-  }
-  ```
-- **Response:**
-  ```json
-  {
-    "message": "Task updated successfully."
-  }
-  ```
+```powershell
+Invoke-RestMethod -Uri "http://127.0.0.1:5000/tasks" -Method Get
+```
 
-### **Delete a Task**
+### Update a Task
+- **Endpoint:** `/tasks/<task_id>`
+- **Method:** PUT
+- **Body:** JSON with updated `title` and `description`
 
-- **Endpoint:** `DELETE /tasks/<task_id>`
-- **Response:**
-  ```json
-  {
-    "message": "Task deleted successfully."
-  }
-  ```
+Example:
 
-### **(Bonus) Mark a Task as Completed**
+```powershell
+Invoke-RestMethod -Uri "http://127.0.0.1:5000/tasks/1" -Method Put -Body '{"title": "Updated Task", "description": "Updated details"}' -ContentType "application/json"
+```
 
-- **Endpoint:** `PATCH /tasks/<task_id>/complete`
-- **Response:**
-  ```json
-  {
-    "message": "Task marked as completed."
-  }
-  ```
+### Mark a Task as Completed
+- **Endpoint:** `/tasks/<task_id>/complete`
+- **Method:** PATCH
 
----
+Example:
 
-## **Evaluation Criteria**
+```powershell
+Invoke-RestMethod -Uri "http://127.0.0.1:5000/tasks/1/complete" -Method Patch
+```
 
-- **Correct implementation of API endpoints**
-- **Proper use of HTTP methods and status codes**
-- **Clear and structured code with proper documentation**
-- **Effective teamwork and problem-solving approach**
+### Delete a Task
+- **Endpoint:** `/tasks/<task_id>`
+- **Method:** DELETE
 
-This challenge encourages students to apply their Flask knowledge while working collaboratively to design a functional API. 🚀
+Example:
+
+```powershell
+Invoke-RestMethod -Uri "http://127.0.0.1:5000/tasks/1" -Method Delete
+```
+
+## Testing Sequence Example
+
+Below is an example of a complete testing sequence using PowerShell's **Invoke-RestMethod**:
+
+1. **Create a Task**
+
+   ```powershell
+   Invoke-RestMethod -Uri "http://127.0.0.1:5000/tasks" -Method Post -Body '{"title": "Learn Flask", "description": "Build an API"}' -ContentType "application/json"
+   ```
+
+   Expected output:
+   ```
+   completed   : False
+   created_at  : 2025-03-08T08:31:47.136940
+   description : Build an API
+   id          : 1
+   title       : Learn Flask
+   ```
+
+2. **Retrieve All Tasks**
+
+   ```powershell
+   Invoke-RestMethod -Uri "http://127.0.0.1:5000/tasks" -Method Get
+   ```
+
+3. **Update the Task**
+
+   ```powershell
+   Invoke-RestMethod -Uri "http://127.0.0.1:5000/tasks/1" -Method Put -Body '{"title": "Updated Task", "description": "Updated details"}' -ContentType "application/json"
+   ```
+
+   Expected output:
+   ```
+   completed   : False
+   created_at  : 2025-03-08T08:31:47.136940
+   description : Updated details
+   id          : 1
+   title       : Updated Task
+   ```
+
+4. **Mark the Task as Completed**
+
+   ```powershell
+   Invoke-RestMethod -Uri "http://127.0.0.1:5000/tasks/1/complete" -Method Patch
+   ```
+
+   Expected output:
+   ```
+   completed   : True
+   created_at  : 2025-03-08T08:31:47.136940
+   description : Updated details
+   id          : 1
+   title       : Updated Task
+   ```
+
+5. **Delete the Task**
+
+   ```powershell
+   Invoke-RestMethod -Uri "http://127.0.0.1:5000/tasks/1" -Method Delete
+   ```
+
+   Expected output:
+   ```
+   message
+   -------
+   Task deleted successfully
+   ```
+
+**Note:** The sequence matters. If you delete a task before marking it as completed, the PATCH request for marking it completed will fail because the task no longer exists.
